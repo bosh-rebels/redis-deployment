@@ -1,6 +1,6 @@
 ---
 releases:
-- name: elasticsearch
+- name: redis
   version: ((redis_version))
   sha1: ((redis_sha1))
 
