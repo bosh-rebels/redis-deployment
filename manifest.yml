@@ -1,4 +1,6 @@
 ---
+name: redis
+
 releases:
 - name: redis
   version: ((redis_version))
