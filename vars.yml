@@ -6,5 +6,5 @@ stemcell_alias: ubuntu-xenial
 stemcell_version: 621.74
 
 vm_type: small
-persistent_disk: 100GB
+persistent_disk: 10240
 network: default
