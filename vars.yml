@@ -1,0 +1,10 @@
+redis_version: 0.14.0
+redis_sha1: a21d937a8e4956830ced94ed4bb6f844f32b07f0
+
+stemcell_os: ubuntu-xenial
+stemcell_alias: ubuntu-xenial
+stemcell_version: 621.74
+
+vm_type: small
+persistent_disk: 100GB
+network: default

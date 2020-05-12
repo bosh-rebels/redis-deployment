@@ -1,0 +1,51 @@
+---
+releases:
+- name: elasticsearch
+  version: ((redis_version))
+  sha1: ((redis_sha1))
+
+stemcells:
+- os: ((stemcell_os))
+  alias: ((stemcell_alias))
+  version: ((stemcell_version))
+
+instance_groups:
+- name: redis
+  jobs:
+  - name: redis
+    release: redis
+    properties:
+      password: ((redis-password))
+  instances: 2  
+  stemcell: ((stemcell_alias))
+  azs: 
+  - z1
+  - z2
+  - z3
+  vm_type: ((vm_type))
+  persistent_disk: ((persistent_disk))
+  networks:
+  - name: ((network))
+
+- name: sanity-tests
+  jobs:
+  - name: sanity-tests
+    release: redis
+  instances: 1
+  stemcell: ((stemcell_alias))
+  azs: 
+  - z1
+  vm_type: ((vm_type))
+  lifecycle: errand
+  networks:
+  - name: ((network))
+
+variables:
+- name: /concourse/main/redis_deployment_password
+
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-20000
+  update_watch_time: 1000-20000
