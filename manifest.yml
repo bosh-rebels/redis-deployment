@@ -1,15 +1,9 @@
 name: redis
 
-addons:
-- name: bpm
-  jobs:
-  - name: bpm
-    release: bpm
-
 releases:
 - name: redis
   sha1: ((redis_sha1))
-  url: https://github.com/bosh-rebels/redis-boshrelease/releases/download/0.14.0/redis-boshrelease-0.14.0.tgz 
+  url: ((url))
   version: ((redis_version)) 
 - name: "bpm"
   version: "1.1.8"
@@ -28,7 +22,7 @@ instance_groups:
     release: redis
     properties:
       password: ((redis-password))
-  instances: 3 
+  instances: 3
   stemcell: ((stemcell_alias))
   azs: 
   - z1
@@ -62,3 +56,9 @@ update:
   serial: true
   canary_watch_time: 1000-20000
   update_watch_time: 1000-20000
+
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
