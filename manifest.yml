@@ -28,7 +28,7 @@ instance_groups:
     release: redis
     properties:
       password: ((redis-password))
-  instances: 2  
+  instances: 3 
   stemcell: ((stemcell_alias))
   azs: 
   - z1
