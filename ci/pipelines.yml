@@ -1,0 +1,86 @@
+resource_types:
+- name: bosh-deployment
+  type: docker-image
+  source:
+    repository: cloudfoundry/bosh-deployment-resource
+
+resources:
+- name: redis-deployment
+  type: git
+  source:
+    uri: https://github.com/bosh-rebels/redis-deployment
+    branch: master
+    
+- name: ubuntu-xenial
+  type: bosh-io-stemcell
+  source:
+    name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
+    version_family: ((stemcell_version))
+
+- name: deploy-release
+  type: bosh-deployment
+  source:
+    deployment: redis
+    target: ((bosh_target))
+    client: ((bosh_client))
+    client_secret: ((bosh_client_secret))
+    ca_cert: ((bosh_ca_cert))
+
+- name: redis-compiled-release
+  type: s3
+  source:
+    region_name: ((s3_region))
+    bucket: binary-releases-repo-rebels
+    regexp: "redis/redis-(.*)-ubuntu-xenial-((stemcell_version))-.*.tgz"
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+- name: bpm-compiled-release
+  type: s3
+  source:
+    region_name: ((s3_region))
+    bucket: binary-releases-repo-rebels
+    regexp: "bpm/bpm-(.*)-ubuntu-xenial-((stemcell_version))-.*.tgz"
+    access_key_id: ((s3_access_key_id))
+    secret_access_key: ((s3_secret_access_key))
+
+jobs:
+- name: deploy-redis
+  plan:
+  - get: redis-deployment
+  - get: redis-compiled-release
+  - get: bpm-compiled-release
+  - get: ubuntu-xenial
+  - task: calculate-sha-for-redis
+    file: redis-deployment/ci/tasks/calculate-sha/task.yml
+    input_mapping:
+      tarball: redis-compiled-release
+    output_mapping:
+      sha: redis-sha
+  - load_var: bpm_version
+    file: bpm-compiled-release/version
+  - load_var: redis_version
+    file: redis-compiled-release/version
+  - load_var: redis_sha1
+    file: redis-sha/sha1
+  - put: deploy-release
+    params:
+      manifest: redis-deployment/manifest.yml
+      stemcells:
+      - ubuntu-xenial/*.tgz
+      releases:
+      - redis-compiled-release/*.tgz
+      - bpm-compiled-release/*.tgz
+      vars:
+        deployment_name: redis-test
+        bpm_version: ((.:bpm_version))
+        redis_version: ((.:redis_version))
+        redis_sha1: ((.:redis_sha1))
+        stemcell_os: ubuntu-xenial
+        stemcell_version: ((stemcell_version))
+        redis_instances: 3
+        redis_vm_type: default
+        redis_persistent_disk_type: 10240
+        redis_network: default
+        errands_vm_type: default
+        errands_network: default

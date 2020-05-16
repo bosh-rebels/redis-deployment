@@ -3,11 +3,11 @@ name: redis
 releases:
 - name: redis
   sha1: ((redis_sha1))
-  url: ((url))
   version: ((redis_version)) 
 
 - name: bpm
   version: ((bpm_version))
+
 stemcells:
 - os: ((stemcell_os))
   alias: default
@@ -29,10 +29,10 @@ instance_groups:
   - z1
   - z2
   - z3
-  vm_type: ((vm_type))
-  persistent_disk: ((redis_persistent_disk))
+  vm_type: ((redis_vm_type))
+  persistent_disk: ((redis_persistent_disk_type))
   networks:
-  - name: ((network))
+  - name: ((redis_network))
 
 - name: redis-sentinel
   jobs:
@@ -50,10 +50,10 @@ instance_groups:
   - z1
   - z2
   - z3
-  vm_type: default
-  persistent_disk: ((redis_persistent_disk))
+  vm_type: ((redis_vm_type))
+  persistent_disk: ((redis_persistent_disk_type))
   networks: 
-  - name: default
+  - name: ((redis_network))
   
 - name: sanity-tests
   jobs:
@@ -63,10 +63,10 @@ instance_groups:
   stemcell: default
   azs: 
   - z1
-  vm_type: ((vm_type))
+  vm_type: ((errands_vm_type))
   lifecycle: errand
   networks:
-  - name: ((network))
+  - name: ((errands_network))
 
 variables:
 - name: redis_password
