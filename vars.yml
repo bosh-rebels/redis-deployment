@@ -2,10 +2,13 @@ redis_version: 0.14.1
 redis_sha1: eaf3f4b8abe2d629bd3efeebf9b95d70ee290d68
 url: https://binary-releases-repo-rebels.s3.eu-west-2.amazonaws.com/redis/redis-0.14.1-ubuntu-xenial-621.74-20200513-125240-573273819.tgz
 
+bpm_version: 1.1.8
+
 stemcell_os: ubuntu-xenial
-stemcell_alias: ubuntu-xenial
 stemcell_version: 621.latest
 
+redis_instances: 3  
+redis_persistent_disk: 10240
+redis_sanity_instances: 1
 vm_type: default
-persistent_disk: 10024
 network: default

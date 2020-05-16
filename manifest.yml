@@ -6,9 +6,11 @@ releases:
   url: ((url))
   version: ((redis_version)) 
 
+- name: bpm
+  version: ((bpm_version))
 stemcells:
 - os: ((stemcell_os))
-  alias: ((stemcell_alias))
+  alias: default
   version: ((stemcell_version))
 
 instance_groups:
@@ -17,24 +19,48 @@ instance_groups:
   - name: redis
     release: redis
     properties:
-      password: ((redis-password))
-  instances: 3
-  stemcell: ((stemcell_alias))
+      password: ((redis_password))
+    provides:
+      redis:
+        as: redis
+  instances: ((redis_instances))
+  stemcell: default
   azs: 
   - z1
   - z2
   - z3
   vm_type: ((vm_type))
-  persistent_disk: ((persistent_disk))
+  persistent_disk: ((redis_persistent_disk))
   networks:
   - name: ((network))
 
+- name: redis-sentinel
+  jobs:
+  - name: redis-sentinel
+    release: redis
+    properties:
+      bind_static_ip: true
+      password: ((redis_password))
+    consumes:
+      redis:
+        from: redis
+  instances: ((redis_instances))
+  stemcell: default 
+  azs: 
+  - z1
+  - z2
+  - z3
+  vm_type: default
+  persistent_disk: ((redis_persistent_disk))
+  networks: 
+  - name: default
+  
 - name: sanity-tests
   jobs:
   - name: sanity-tests
     release: redis
-  instances: 1
-  stemcell: ((stemcell_alias))
+  instances: ((redis_sanity_instances))
+  stemcell: default
   azs: 
   - z1
   vm_type: ((vm_type))
@@ -43,7 +69,7 @@ instance_groups:
   - name: ((network))
 
 variables:
-- name: redis-password
+- name: redis_password
   type: password
 
 update:
