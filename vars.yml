@@ -4,7 +4,7 @@ redis_sha1: b6c854047aa70131ae3beae308b10319d3dd7e3a
 bpm_version: 1.1.8
 
 stemcell_os: ubuntu-xenial
-stemcell_version: 621.74
+stemcell_version: "621.74"
 
 redis_instances: 3  
 redis_persistent_disk_type: 10240

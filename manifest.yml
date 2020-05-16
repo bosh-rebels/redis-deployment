@@ -59,7 +59,7 @@ instance_groups:
   jobs:
   - name: sanity-tests
     release: redis
-  instances: ((redis_sanity_instances))
+  instances: 1
   stemcell: default
   azs: 
   - z1
