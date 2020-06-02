@@ -20,7 +20,7 @@ resources:
 - name: deploy-release
   type: bosh-deployment
   source: &redis_deployment_resource
-    deployment: redis
+    deployment: ((deployment_name))
     target: ((bosh_target))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
@@ -100,7 +100,7 @@ jobs:
       - redis-compiled-release/*.tgz
       - bpm-compiled-release/*.tgz
       vars:
-        deployment_name: redis
+        deployment_name: redis_test
         bpm_version: ((.:bpm_version))
         redis_version: ((.:redis_version))
         bpm_sha1: ((.:bpm_sha1))
@@ -119,7 +119,7 @@ jobs:
           file: redis-deployment/ci/tasks/test-deployment/task.yml
           params:
             errands_to_be_run: "sanity-tests"
-            deployment_name: redis
+            deployment_name: ((deployment_name))
             BOSH_ENVIRONMENT: ((bosh_target))
             BOSH_CA_CERT: ((bosh_ca_cert))
             BOSH_CLIENT: ((bosh_client))
