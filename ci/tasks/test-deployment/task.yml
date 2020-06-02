@@ -1,0 +1,27 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: paymentshubrebels/bosh-utils
+    tag: 'latest'
+
+params:
+  deployment_name:
+  errands_to_be_run:
+  BOSH_ENVIRONMENT:
+  BOSH_CA_CERT:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
+run:
+  path: /bin/bash
+  args:
+  - -ec
+  - |
+    errands_names=($(echo "${errands_to_be_run}" | tr ',' "\n"))
+    echo "names - ${errands_names[@]}"
+    for errand in "${errands_names[@]}"; do
+      echo "Errand name - ${errand}"
+      bosh -d "${deployment_name}" run-errand "${errand}"
+    done
