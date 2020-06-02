@@ -1,4 +1,4 @@
-name: redis
+name: ((deployment_name))
 
 releases:
 - name: redis
@@ -6,6 +6,7 @@ releases:
   version: ((redis_version)) 
 
 - name: bpm
+  sha1: ((bpm_sha1))
   version: ((bpm_version))
 
 stemcells:
