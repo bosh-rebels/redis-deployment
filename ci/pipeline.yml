@@ -4,6 +4,13 @@ resource_types:
   source:
     repository: cloudfoundry/bosh-deployment-resource
 
+var_sources:
+  - name: deployment
+    type: dummy
+    config:
+      vars:
+        name: redis-ci-test-package
+
 resources:
 - name: redis-deployment
   type: git
@@ -20,7 +27,7 @@ resources:
 - name: deploy-release
   type: bosh-deployment
   source: &redis_deployment_resource
-    deployment: ((deployment_name))
+    deployment: ((deployment:name))
     target: ((bosh_target))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
@@ -100,7 +107,7 @@ jobs:
       - redis-compiled-release/*.tgz
       - bpm-compiled-release/*.tgz
       vars:
-        deployment_name: redis_test
+        deployment_name: ((deployment:name))
         bpm_version: ((.:bpm_version))
         redis_version: ((.:redis_version))
         bpm_sha1: ((.:bpm_sha1))
@@ -119,7 +126,7 @@ jobs:
           file: redis-deployment/ci/tasks/test-deployment/task.yml
           params:
             errands_to_be_run: "sanity-tests"
-            deployment_name: ((deployment_name))
+            deployment_name: ((deployment:name))
             BOSH_ENVIRONMENT: ((bosh_target))
             BOSH_CA_CERT: ((bosh_ca_cert))
             BOSH_CLIENT: ((bosh_client))
