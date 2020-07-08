@@ -26,10 +26,7 @@ instance_groups:
         as: redis
   instances: ((redis_instances))
   stemcell: default
-  azs: 
-  - z1
-  - z2
-  - z3
+  azs: ((azs))
   vm_type: ((redis_vm_type))
   persistent_disk: ((redis_persistent_disk_type))
   networks:
@@ -47,10 +44,7 @@ instance_groups:
         from: redis
   instances: ((redis_instances))
   stemcell: default 
-  azs: 
-  - z1
-  - z2
-  - z3
+  azs: ((azs))
   vm_type: ((redis_vm_type))
   persistent_disk: ((redis_persistent_disk_type))
   networks: 
@@ -62,8 +56,7 @@ instance_groups:
     release: redis
   instances: 1
   stemcell: default
-  azs: 
-  - z1
+  azs: ((azs))
   vm_type: ((errands_vm_type))
   lifecycle: errand
   networks:
