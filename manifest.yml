@@ -1,3 +1,6 @@
+---
+name: ((deployment))
+
 releases:
 - name: redis
   sha1: ((redis_sha1))
