@@ -4,6 +4,12 @@ resource_types:
   source:
     repository: cloudfoundry/bosh-deployment-resource
 
+s3_bucket_binary: &s3_bucket_binary
+  region_name: ((s3_region))
+  bucket: ((s3_bucket_binary))
+  access_key_id: ((s3_access_key_id))
+  secret_access_key: ((s3_secret_access_key))
+
 var_sources:
   - name: deployment
     type: dummy
@@ -17,7 +23,7 @@ resources:
   source:
     uri: https://github.com/bosh-rebels/redis-deployment
     branch: master
-    
+
 - name: ubuntu-xenial
   type: bosh-io-stemcell
   source:
@@ -41,20 +47,14 @@ resources:
 - name: redis-compiled-release
   type: s3
   source:
-    region_name: ((s3_region))
-    bucket: binary-releases-repo-rebels
+    <<: *s3_bucket_binary
     regexp: "redis/redis-(.*)-ubuntu-xenial-((stemcell_version))-.*.tgz"
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
 
 - name: bpm-compiled-release
   type: s3
   source:
-    region_name: ((s3_region))
-    bucket: binary-releases-repo-rebels
+    <<: *s3_bucket_binary
     regexp: "bpm/bpm-(.*)-ubuntu-xenial-((stemcell_version))-.*.tgz"
-    access_key_id: ((s3_access_key_id))
-    secret_access_key: ((s3_secret_access_key))
 
 - name: offline-release-version
   type: semver
@@ -62,7 +62,7 @@ resources:
     driver: s3
     region_name: ((s3_region))
     initial_version: 0.0.1
-    bucket: bosh-releases-semver-rebels
+    bucket: ((s3_bucket_semver))
     key: deployments/redis/version
     access_key_id: ((s3_access_key_id))
     secret_access_key: ((s3_secret_access_key))
@@ -82,7 +82,7 @@ jobs:
     input_mapping:
       tarball: redis-compiled-release
     output_mapping:
-      sha: redis-sha  
+      sha: redis-sha
   - task: calculate-sha-for-bpm
     file: redis-deployment/ci/tasks/calculate-sha/task.yml
     input_mapping:
@@ -139,7 +139,7 @@ jobs:
                   deployment_name: redis
               - put: offline-release-version
                 params: {bump: patch}
- 
+
 - name: remove-deployment
   plan:
   - put: remove-deployment
