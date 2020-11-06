@@ -53,6 +53,8 @@ instance_groups:
     properties:
       death_probability: 10
       ruin_probability: 0
+      sentinel_cap_probability: 20
+      sentinel_cae_probability: 20
   - name: redis-sentinel
     release: redis
     properties:
