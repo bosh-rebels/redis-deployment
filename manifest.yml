@@ -21,9 +21,6 @@ instance_groups:
   - name: redis-bootstrap
     release: redis
     properties: {}
-  - name: heal-redis
-    release: redis
-    properties: {}
   - name: redis-chaos
     release: redis
     properties:
@@ -49,9 +46,6 @@ instance_groups:
 - name: redis-sentinel
   jobs:
   - name: redis-bootstrap
-    release: redis
-    properties: {}
-  - name: heal-redis
     release: redis
     properties: {}
   - name: redis-chaos
