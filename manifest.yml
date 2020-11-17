@@ -24,10 +24,10 @@ instance_groups:
   - name: redis-chaos
     release: redis
     properties:
-      death_probability: 10
-      ruin_probability: 0
-      segfault_probability: 25
-      sleep_probability: 25
+      death_probability: ((redis_chaos_death_probability))
+      ruin_probability: ((redis_chaos_ruin_probability))
+      segfault_probability: ((redis_chaos_segfault_probability))
+      sleep_probability: ((redis_chaos_sleep_probability))
   - name: redis
     release: redis
     properties:
@@ -51,10 +51,10 @@ instance_groups:
   - name: redis-chaos
     release: redis
     properties:
-      death_probability: 10
-      ruin_probability: 0
-      sentinel_cap_probability: 20
-      sentinel_cae_probability: 20
+      death_probability: ((redis_sentinel_chaos_death_probability))
+      ruin_probability: ((redis_sentinel_chaos_ruin_probability))
+      sentinel_cap_probability: ((redis_sentinel_chaos_sentinel_cap_probability))
+      sentinel_cae_probability: ((redis_sentinel_chaos_sentinel_cae_probability))
   - name: redis-sentinel
     release: redis
     properties:
